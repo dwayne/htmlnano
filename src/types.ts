@@ -2,6 +2,7 @@ import type PostHTML from 'posthtml';
 import type { MinifyOptions } from 'terser';
 import type { Options as CssNanoOptions } from 'cssnano';
 import type { Config as SvgoOptimizeOptions } from 'svgo';
+import type { UserDefinedOptions as PurgeCSSOptions } from 'purgecss';
 
 export type PostHTMLTreeLike = [PostHTML.Node] & PostHTML.NodeAPI & {
     options?: {
@@ -41,7 +42,22 @@ export interface HtmlnanoOptions {
     removeEmptyAttributes?: boolean;
     removeRedundantAttributes?: boolean;
     removeOptionalTags?: boolean;
-    removeUnusedCss?: boolean;
+    removeUnusedCss?: boolean
+        | ({ tool: 'purgeCSS' } & Omit<PurgeCSSOptions, 'content' | 'css' | 'extractors'>)
+        | {
+            banner?: boolean;
+            csspath?: string;
+            htmlroot?: string;
+            ignore?: (string | RegExp)[];
+            inject?: string;
+            jsdom?: object;
+            media?: string[];
+            report?: boolean;
+            strictSSL?: boolean;
+            timeout?: number;
+            uncssrc?: string;
+            userAgent?: string;
+        };
     sortAttributes?: boolean | 'alphabetical' | 'frequency';
     sortAttributesWithLists?: boolean | 'alphabetical' | 'frequency';
 }
